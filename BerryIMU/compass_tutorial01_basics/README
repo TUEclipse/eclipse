@@ -1,0 +1,13 @@
+* Developed by Mark Williams
+* Created December 2014
+
+
+To compile;
+gcc -o compass_tutorial01 compass_tutorial01.c -lm
+
+To run;
+sudo ./compass_tutorial01
+
+
+More info here;
+http://ozzmaker.com/compass1/
