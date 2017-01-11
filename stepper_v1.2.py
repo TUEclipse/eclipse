@@ -1,16 +1,21 @@
 #!/usr/local/bin/python
+
 import sys
 import os
+import time
+
+#Initial value corresponding to 180 degree point
+initial_val = 257
 
 # Function that writes a list to a text file.
-# This function is used as a means of providing the shuffle player 
-# with memory.
+# This function is used as a means of providing memory to keep track of the position of the stepper.
 def write_to_temp_file(value):
 	# Opening/creating temporary text file if it does not exist
         try: 
-                with open("list.txt", 'w') as f:
-	                f.write(value + '\n')
+                with open("mem.txt", 'w') as f:
+			f.write('%d' %int(value))
         except IOError:
+
                 # Letting the user know that an IO error has occured
                 print 'Cannot open storage file for writing'
         else:
@@ -18,44 +23,36 @@ def write_to_temp_file(value):
                 print "File closed"
                 f.close()
 
-
-
 def main():
+
 	steps = raw_input("How many steps forward? ")
-	write_to_temp_file(steps)
-	print steps
 
 	# Checking if text file used for memory by the program exists
-	if os.path.isfile('list.txt'):
-		# Checking if the file used to store the song list ("list.txt") is empty	
-		# If text file is empty a new list of random songs is generated and the path
-		# for each of the songs is written to the "list.txt" file
-		if os.path.getsize('list.txt') == 0:
-			write_to_temp_file(steps)
+	if os.path.isfile('mem.txt'):
+
 		# If the text file is not empty which signifies its existence the file is read line by line
-		if os.path.getsize('list.txt') != 0:	
-		
+		if os.path.getsize('mem.txt') != 0:	
+			
 			try:
-				# Opening text file used to store the song list for reading
-				fp = open("list.txt",'r')
+				# Opening storage file for reading
+				fp = open("mem.txt",'r')
+
 			except IOError:
+
 				print 'Cannot open storage file for reading'
 			else:
-				# Generating a list of all the song paths read in from the storage text file (list.txt)
-				val = [line.rstrip('\n') for line in fp]
+
+				current_val = [int(n) for n in fp.read().split()]
+				val = int(current_val[0]) + int(steps)
+			
 				# Closing file that was opened for reading
 				fp.close()
-				time.sleep(0.1)
-				# Deleting the song which was just played from the current list of song paths
-				del song_list[i]
-				# Writing modified list (with a member/song path deleted) to the text file storing the paths to the songs
-				write_to_temp_file(song_list)
-				# Starting the process over again
-				# Moving on to next song
-	else:
 
-		# Generating a random list of songs the path to which is provided by the user via the command line
-		# This is performed if the temporary storage file "list.txt" does not exit
-		write_to_temp_file(val)
+				write_to_temp_file(val)
+	else:
+		# Creating a text file with the initial/default position of the stepper motor		
+		write_to_temp_file(initial_val)
+
+
 if __name__=="__main__":
 	main()
