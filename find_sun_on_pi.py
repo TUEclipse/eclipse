@@ -132,7 +132,7 @@ while True:
     # if pixel value is more than (sometimes less than) the threshold value
     out, threshold = cv2.threshold(blur, brightest_value - 10, 230, cv2.THRESH_BINARY)
     thr = threshold.copy()
-    print out
+    
     # Resize frame for ease
     # cv2.resize(thr, (300, 300))
     # Find contours in thresholded frame
@@ -157,7 +157,8 @@ while True:
         # Avoiding random spots of brightness by making sure the contour is reasonably sized
         if cv2.contourArea(maxcontour) :
             (x, final_y), radius = cv2.minEnclosingCircle(maxcontour)
-            cv2.circle(frame, (int(x), int(final_y)), int(radius), (0, 255, 0), 4)
+            print "x value:",x,"y value:",final_y
+	    cv2.circle(frame, (int(x), int(final_y)), int(radius), (0, 255, 0), 4)
             cv2.rectangle(frame, (int(x) - 5, int(final_y) - 5), (int(x) + 5, int(final_y) + 5), (0, 128, 255), -1)
             # Display frames and exit
     cv2.imshow('light', thr)
