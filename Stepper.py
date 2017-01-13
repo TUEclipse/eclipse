@@ -108,32 +108,43 @@ class Stepper:
                         self.forward(int(Stepper.delay) / 1000.0, abs(steps))
                         self.clear()
 				
-		# steps = raw_input("How many steps forward? ")
+		# Checking if text file used for memory by the program exists
+		if os.path.isfile('mem.txt'):
+							
+			try:
+				 # Opening storage file for reading
+				fp = open("mem.txt",'r')
+			
+			except IOError:
+			
+				print 'Cannot open storage file for reading'
+			
+			else:
 
-		# # Checking if text file used for memory by the program exists
-		# if os.path.isfile('mem.txt'):
-
-			# # If the text file is not empty which signifies its existence the file is read line by line
-			# if os.path.getsize('mem.txt') != 0:	
-					
-				# try:
-					# # Opening storage file for reading
-					# fp = open("mem.txt",'r')
-
-				# except IOError:
-
-					# print 'Cannot open storage file for reading'
-				# else:
-
-					# current_val = [int(n) for n in fp.read().split()]
-					# val = int(current_val[0]) + int(steps)
-					
-					# # Closing file that was opened for reading
-					# fp.close()
-
-					# write_to_temp_file(val)
-			# else:
-				# # Creating a text file with the initial/default position of the stepper motor		
-				# write_to_temp_file(initial_val)
-
-
+				current_val = [int(n) for n in fp.read().split()]
+				val = int(current_val[0]) + int(steps)
+				
+				# Closing file that was opened for reading
+				fp.close()
+				self.write_to_temp_file(val)
+		
+		else:
+		
+			# Creating a text file with the initial/default position of the stepper motor		
+			self.write_to_temp_file(Stepper.initial_val)
+		
+			try:
+				 # Opening storage file for reading
+				fp = open("mem.txt",'r')
+			except IOError:
+			
+				print 'Cannot open storage file for reading'
+			
+			else:
+			
+				current_val = [int(n) for n in fp.read().split()]
+				val = int(current_val[0]) + int(steps)
+				
+				# Closing file that was opened for reading
+				fp.close()
+				self.write_to_temp_file(val)
