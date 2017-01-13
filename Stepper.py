@@ -89,7 +89,7 @@ class Stepper:
 		else:
 
 		    	# Closing the opened file
-	    		print "File closed"
+#	    		print "File closed"
 		    	f.close()
 
 	def change_position(self):
