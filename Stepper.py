@@ -1,4 +1,4 @@
-#!/usr/local/bin/python2
+#!/usr/bin/python2
 
 import RPi.GPIO as GPIO
 import time
@@ -122,6 +122,32 @@ class Stepper:
 			else:
 
 				current_val = [int(n) for n in fp.read().split()]
+				required_pos = steps + current_val[0]
+				if required_pos <= 0:
+					val = 514- abs(required_pos)
+					self.forward(int(Stepper.delay) / 1000.0, abs(val))
+                        		self.clear()
+					fp.close()
+                                	self.write_to_temp_file(val)
+				
+				if required_pos >= 514:
+					print "going back"
+                                        val = 514 + abs(required_pos)
+                                        self.forward(int(Stepper.delay) / 1000.0, abs(val))
+                                        print val
+					self.clear()
+                                        fp.close()
+                                        self.write_to_temp_file(val)
+						
+#					val = int(current_val[0]) + int(steps + 257)
+#					self.forward(int(Stepper.delay) / 1000.0, abs(val))
+#
+#				if current val => 514 
+#					val = int(current_val[0]) + int(steps + 257)
+#                                       self.write_to_temp_file(val)
+#                                       self.forward(int(Stepper.delay) / 1000.0, abs(val))
+
+
 				val = int(current_val[0]) + int(steps)
 				
 				# Closing file that was opened for reading
