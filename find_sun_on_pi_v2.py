@@ -12,7 +12,6 @@ import cv2
 from imutils.video import VideoStream
 import datetime
 import argparse
-from Stepper import Stepper
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-p", "--picamera", type=int, default=-1, help="whether the PiCamera being used")
@@ -69,11 +68,7 @@ while True:
                 # Avoiding random spots of brightness by making sure the contour is reasonably sized
                 if cv2.contourArea(maxcontour):
                         (x, final_y), radius = cv2.minEnclosingCircle(maxcontour)
-
                         print "x value:",x,"y value:",final_y
-
-			t=Stepper(x,final_y)
-			t.change_position()
                         cv2.circle(frame, (int(x), int(final_y)), int(radius), (0, 255, 0), 4)
                         cv2.rectangle(frame, (int(x) - 5, int(final_y) - 5), (int(x) + 5, int(final_y) + 5), (0, 128, 255), -1)
                         # Display frames and exit
