@@ -1,4 +1,4 @@
-#!/usr/local/bin/python2
+#!/usr/bin/python2
 
 import RPi.GPIO as GPIO
 import time
@@ -38,7 +38,6 @@ class Stepper:
                 GPIO.output(Stepper.coil_B_2_pin, w4)
 
 	def forward(self,delay, steps):
-#		print "In forward method"  
 		for i in range(0, steps):
 	                self.setStep(1, 0, 1, 0)
                         time.sleep(delay)
@@ -50,7 +49,6 @@ class Stepper:
 	    		time.sleep(delay)
 		 
 	def backwards(self,delay, steps):
-#		print "In backwards method"  
 		for i in range(0, steps):
 			self.setStep(0, 0, 1, 1)
 			time.sleep(delay)
@@ -89,7 +87,6 @@ class Stepper:
 		else:
 
 		    	# Closing the opened file
-#	    		print "File closed"
 		    	f.close()
 
 	def change_position(self):
@@ -122,11 +119,35 @@ class Stepper:
 			else:
 
 				current_val = [int(n) for n in fp.read().split()]
-				val = int(current_val[0]) + int(steps)
-				
-				# Closing file that was opened for reading
-				fp.close()
-				self.write_to_temp_file(val)
+				required_pos = steps + current_val[0]
+				print "steps:",steps,"current_val[0]",current_val[0], "required_pos:",required_pos
+				if required_pos < 0:
+					print "Inside Negative routine"
+					step_val = 514 - abs(required_pos)
+					self.forward(int(Stepper.delay) / 1000.0, abs(step_val))
+                        		self.clear()
+					fp.close()
+					print "step_val",step_val
+                                	self.write_to_temp_file(step_val)
+					print "step_val written to text file"
+
+				elif required_pos > 514:
+                                        print "Inside Positive routine"
+					step_val = 514 - abs(steps)
+                                        self.backwards(int(Stepper.delay) / 1000.0, abs(step_val))
+                                        self.clear()
+                                        fp.close()
+                                        print "step_val",step_val
+					new_curr_value = abs(steps)
+                                        self.write_to_temp_file(new_curr_value)
+                                        print "step_val written to text file"			
+
+				else:
+					val = int(current_val[0]) + int(steps)
+					print "val",val
+					# Closing file that was opened for reading
+					fp.close()
+					self.write_to_temp_file(val)
 		
 		else:
 		
