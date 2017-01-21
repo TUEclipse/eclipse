@@ -21,10 +21,6 @@ args = vars(ap.parse_args())
 vs = VideoStream(usePiCamera=args["picamera"] > 0).start()
 time.sleep(2.0)
 
-# Creating a VideoCapture object while also specifying which camera will be used for the purpose
-# of capturing the video using hte input parameter 0.
-cap = cv2.VideoCapture(0)
-
 while True:
 
         frame = vs.read()
@@ -37,7 +33,7 @@ while True:
 
         # Using an opencv method to identify the threshold intensities and locations
         (darkest_value, brightest_value, darkest_loc, brightest_loc) = cv2.minMaxLoc(blur)
-
+	print "Brightest Value:",brightest_value
         # Threshold the blurred frame accordingly
         # First argument is the source image, which is the grayscale image. Second argument is the threshold value
         # which is used to classify the pixel values. Third argument is the maxVal which represents the value to be given
@@ -51,7 +47,7 @@ while True:
         edged = cv2.Canny(threshold, 50, 150)
 
         # First one is source image, second is contour retrieval mode, third is contour approximation method. And it outputs
-        # the contours and hierarchy. contours is a Python list of all the contours in the image. Each individual contour
+        # the contours and hierarchy. Contours is a Python list of all the contours in the image. Each individual contour
         # is a Numpy array of (x,y) coordinates of boundary points of the object.
         lightcontours, hierarchy = cv2.findContours(edged, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
@@ -77,7 +73,7 @@ while True:
                         cv2.circle(frame, (int(x), int(final_y)), int(radius), (0, 255, 0), 4)
                         cv2.rectangle(frame, (int(x) - 5, int(final_y) - 5), (int(x) + 5, int(final_y) + 5), (0, 128, 255), -1)
                         # Display frames and exit
-        cv2.imshow('light', thr)
+#       cv2.imshow('light', thr)
         cv2.imshow('frame', frame)
         cv2.waitKey(4)
         key = cv2.waitKey(1)
