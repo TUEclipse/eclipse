@@ -51,12 +51,6 @@ while True:
         # is a Numpy array of (x,y) coordinates of boundary points of the object.
         lightcontours, hierarchy = cv2.findContours(edged, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-        # Attempting to  find the circle created by the torch illumination on the wal
-        circles = cv2.HoughCircles(threshold, cv2.cv.CV_HOUGH_GRADIENT, 1.0, 20,
-                                   param1=10,
-                                   param2=15,
-                                   minRadius=20,
-                                   maxRadius=100, )
 
         # Checking if the list of contours is greater than 0 and if any circles are detected
         if (len(lightcontours)):
