@@ -92,8 +92,10 @@ class Stepper:
 	def change_position(self):
 		# Horizontal field of view for pi camera: 53.50 +/- 0.13 degrees
 		# Convertin pixel value which is the distance from the center pixel (200) 
-		degree_val = (self.x_raw-200) * 53.5/400
-		steps = int(degree_val * 360/513)
+
+		degree_val = (self.x_raw-200) * 53.5/400 #COMMENT THIS LINE BACK IN
+		steps = int(degree_val * 360/513) # COMMENT THIS LINE BACK IN 
+
 		
 		# Negative -- left -- backwards
 		if steps < 0:
@@ -123,7 +125,10 @@ class Stepper:
 				print "steps:",steps,"current_val[0]",current_val[0], "required_pos:",required_pos
 				if required_pos < 0:
 					print "Inside Negative routine"
-					step_val = 514 - abs(required_pos)
+					step_val = 514 - abs(required_pos) # Setting the step_val in this manner will cause slight deviation from the reference position (257)
+                        #               However, it also adds stability to the operation in that the device will be less prone to rotate back and forth repeatedly      
+
+#					step_val = 514
 					self.forward(int(Stepper.delay) / 1000.0, abs(step_val))
                         		self.clear()
 					fp.close()
@@ -133,7 +138,9 @@ class Stepper:
 
 				elif required_pos > 514:
                                         print "Inside Positive routine"
-					step_val = 514 - abs(steps)
+					step_val = 514 - abs(steps) # Setting the step_val in this manner will cause slight deviation from the reference position (257)
+			#		However, it also adds stability to the operation in that the device will be less prone to rotate back and forth repeatedly	
+#					step_val = 514
                                         self.backwards(int(Stepper.delay) / 1000.0, abs(step_val))
                                         self.clear()
                                         fp.close()
@@ -169,3 +176,111 @@ class Stepper:
 				# Closing file that was opened for reading
 				fp.close()
 				self.write_to_temp_file(val)
+
+
+	def change_position_scan(self):
+
+
+		steps = int(73) 
+		
+		# Negative -- left -- backwards
+		if steps < 0:
+                        self.backwards(int(Stepper.delay) / 1000.0, abs(steps))
+                        self.clear()
+
+		# Positive -- right -- forward
+		elif steps > 0:
+                        self.forward(int(Stepper.delay) / 1000.0, abs(steps))
+                        self.clear()
+				
+		# Checking if text file used for memory by the program exists
+		if os.path.isfile('mem.txt'):
+							
+			try:
+				 # Opening storage file for reading
+				fp = open("mem.txt",'r')
+			
+			except IOError:
+			
+				print 'Cannot open storage file for reading'
+			
+			else:
+
+				current_val = [int(n) for n in fp.read().split()]
+				required_pos = steps + current_val[0]
+				print "steps:",steps,"current_val[0]",current_val[0], "required_pos:",required_pos
+				if required_pos < 0:
+					print "Inside Negative routine"
+					step_val = 514
+					self.forward(int(Stepper.delay) / 1000.0, abs(step_val))
+                        		self.clear()
+					fp.close()
+					print "step_val",step_val
+                                	self.write_to_temp_file(step_val)
+					print "step_val written to text file"
+
+				elif required_pos > 514:
+                                        print "Inside Positive routine"
+					step_val = 514
+				#	step_val = required_pos - abs(steps)
+                                        self.backwards(int(Stepper.delay) / 1000.0, abs(step_val))
+                                        self.clear()
+                                        fp.close()
+                                        print "step_val",step_val
+					new_curr_value = required_pos - 514
+                                        self.write_to_temp_file(new_curr_value)
+                                        print "step_val written to text file"			
+
+				else:
+					val = int(current_val[0]) + int(steps)
+					print "val",val
+					# Closing file that was opened for reading
+					fp.close()
+					self.write_to_temp_file(val)
+		
+		else:
+		
+			# Creating a text file with the initial/default position of the stepper motor		
+			self.write_to_temp_file(Stepper.initial_val)
+		
+			try:
+				 # Opening storage file for reading
+				fp = open("mem.txt",'r')
+			except IOError:
+			
+				print 'Cannot open storage file for reading'
+			
+			else:
+			
+				current_val = [int(n) for n in fp.read().split()]
+				val = int(current_val[0]) + int(steps)
+				
+				# Closing file that was opened for reading
+				fp.close()
+				self.write_to_temp_file(val)
+
+
+	def return_to_bright_spot(self,position):
+
+		try:
+			# Opening storage file for reading
+			fp = open("mem.txt",'r')
+
+		except IOError:
+	
+			print 'Cannot open storage file for reading'
+		else:
+			current_val = [int(n) for n in fp.read().split()]
+			val = int(current_val[0])
+			steps = abs(int(val)-position)
+			# Closing file that was opened for reading
+			self.write_to_temp_file(position)
+               		fp.close()
+			if position < val:
+				self.backwards(int(Stepper.delay) / 1000.0, abs(steps))
+               	        	self.clear()
+				
+			elif position > val: 
+				self.forward(int(Stepper.delay) / 1000.0, abs(steps))
+                	        self.clear()
+
