@@ -118,7 +118,7 @@ class Stepper:
         degree_val = (self.x_raw - 200) * 53.5 / 400  # CHANGE FOR NUMBER OF DEGREES
 
         # finds current number of steps that are equivalent to the degree value to change to center
-        steps = int(degree_val * 360 / 513)  # CHANGES FOR NUMBER OF STEPS
+        steps = int(degree_val * 513 / 360)  # CHANGES FOR NUMBER OF STEPS
 
         # Negative -- left -- backwards --> Corrects to the left
         if steps < 0:
