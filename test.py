@@ -1,5 +1,6 @@
 from Stepper import Stepper
-
+  # TEST FILE FOR DETERMINING IF IT WORKS
+  # ONLY RUN THIS FILE
 
 t=Stepper(0,0)
 #print t.x_raw
