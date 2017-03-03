@@ -24,37 +24,23 @@ delay_period = 0.01
 
 # one degree of movement corresponds to 0.888 ms
 
-def mov_servo(self):
+def move_servo():
 
 	while True:
-		angle = raw_input("How many steps degrees? ")
-               	if angle > 0: 
-			wiringpi.pwmWrite(18,int(133 + (0.888*angle)))
+		angle = int(raw_input("How many degrees? "))
+		# Pulse width given in milliseconds
+                pulse_width = 133 + int(0.888*angle)
+               	if angle >= 0:
+			wiringpi.pwmWrite(18,pulse_width)
         		time.sleep(delay_period)
-		if angle < 0:
-			wiringpi.pwmWrite(18,int(133 - (0.888*angle)))
+		if angle <= 0:
+			wiringpi.pwmWrite(18,pulse_width)
                         time.sleep(delay_period)	
-		
-	
-	
-
-#while True:
-#        for pulse in range(50, 250, 1):
-#                wiringpi.pwmWrite(18, pulse)
-#                time.sleep(delay_period)
-#        for pulse in range(250, 50, -1):
-#                wiringpi.pwmWrite(18, pulse)
-#                time.sleep(delay_period)
-
-#	wiringpi.pwmWrite(18,93)
-#	time.sleep(delay_period)
-	
-
-
+			
 
 def main():
 
-	mov_servo()
+	move_servo()
 
 
 if __name__ == "__main__":
