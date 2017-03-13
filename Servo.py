@@ -2,6 +2,7 @@
 
 import time
 import wiringpi
+import os 
 
 class Servo:
 
@@ -80,10 +81,10 @@ class Servo:
 
 	def servo_control(self):
 
-
-
                 # Checking if text file used for memory by the program exists
                 if os.path.isfile('mem2.txt'):
+
+			print "Inside if (mem2.txt) already exists"
 
                         try:
                                  # Opening storage file for reading
@@ -103,44 +104,26 @@ class Servo:
                                 # Pulse width given in millisecond
 
 				required_angle = angle + current_val[0]
-                                pulse_width = 133 + int(0.888*required_angle)
-                                wiringpi.pwmWrite(18,pulse_width)
+
+				if required_angle > 40:
+					required_angle = 40
+				elif required_angle < -40:
+					required_angle = -40
+				      	
+			        pulse_width = 133 + int(0.888*required_angle)
+
+                                time.sleep(0.1)
+				wiringpi.pwmWrite(18,pulse_width)
                                 time.sleep(Servo.delay_period)
-
-                                print "steps:",steps,"current_val[0]",current_val[0], "required_pos:",required_pos
-                                if required_pos < 0:
-                                        print "Inside Negative routine"
-                                        step_val = 514 - abs(required_pos) # Setting the step_val in this manner will cause slight deviation from the refe$                        #               However, it also adds stability to the operation in that the device will be less prone to rotate back and forth re$
-#                                       step_val = 514
-                                        self.forward(int(Stepper.delay) / 1000.0, abs(step_val))
-                                        self.clear()
-                                        fp.close()
-                                        print "step_val",step_val
-                                        self.write_to_temp_file(step_val)
-                                        print "step_val written to text file"
-
-                                elif required_pos > 514:
-                                        print "Inside Positive routine"
-                                        step_val = 514 - abs(steps) # Setting the step_val in this manner will cause slight deviation from the reference p$                        #               However, it also adds stability to the operation in that the device will be less prone to rotate back and forth re$#                                       step_val = 514
-                                        self.backwards(int(Stepper.delay) / 1000.0, abs(step_val))
-                                        self.clear()
-                                        fp.close()
-					print "step_val",step_val
-                                        new_curr_value = abs(steps)
-                                        self.write_to_temp_file(new_curr_value)
-                                        print "step_val written to text file"
-
-                                else:
-                                        val = int(current_val[0]) + int(steps)
-                                        print "val",val
-                                        # Closing file that was opened for reading
-                                        fp.close()
-                                        self.write_to_temp_file()
+				print "Angle:",angle
+				print "Requried angle:",required_angle
+                                fp.close()
+                                self.write_to_temp_file_servo(required_angle)
                 else:
 
                         # Creating a text file with the initial/default position of the stepper motor
-                        self.write_to_temp_file_servo(angle)
-
+			print "Inside else"
+			self.write_to_temp_file_servo(0)
                         try:
                                  # Opening storage file for reading
                                 fp = open("mem2.txt",'r')
@@ -149,21 +132,24 @@ class Servo:
                                 print 'Cannot open storage file for reading'
 
                         else:
-				print "Y_Poisition", self.y_raw
 
 		                angle = int((self.y_raw - 150) * 41.4/300)
-                		# Pulse width given in millisecond
-                		print "Inside 1st if angle = ",angle
-                		pulse_width = 133 + int(0.888*angle)
-                		wiringpi.pwmWrite(18,pulse_width)
+                		if angle > 40:
+					angle = 40
+				# Pulse width given in millisecond
+                		elif angle < -40:
+					angle = -40
+			
+				pulse_width = 133 + int(0.888*angle)
+
+             			time.sleep(0.1)
+		   		wiringpi.pwmWrite(18,pulse_width)
                 		time.sleep(Servo.delay_period)
 
-                                current_val = [int(n) for n in fp.read().split()]
-                                degree_val = int(current_val[0]) + angle
 
                                 # Closing file that was opened for reading
                                 fp.close()
-                                self.write_to_temp_file_servo(degree_val, self.y_raw)
+                                self.write_to_temp_file_servo(angle)
 
 
 
