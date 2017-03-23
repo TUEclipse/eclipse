@@ -144,7 +144,7 @@ def main(argv):
 		for i in range(len(lightcontours)):
 			(x, final_y), radius = cv2.minEnclosingCircle(lightcontours[i])
 			print "First Time-----","x value:", x, "y value", final_y, "radius", radius
-			if radius > 20:
+			if radius > 10:
 		    		print "Inside special if statement"
 		    		contour.append(lightcontours[i])
 			else:
