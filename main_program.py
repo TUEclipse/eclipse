@@ -164,7 +164,7 @@ def main(argv):
 				t=Stepper(x,final_y)
 				s = Servo(final_y)
 				s.servo_control()
-#				t.change_position()
+				t.change_position()
 		
 	                        cv2.circle(frame, (int(x), int(final_y)), int(radius+20), (0, 255, 0), 4)
 	                        cv2.rectangle(frame, (int(x) - 5, int(final_y) - 5), (int(x) + 5, int(final_y) + 5), (0, 128, 255), -1)
