@@ -61,8 +61,8 @@ class ServoManual:
                         f.close()
 
 
-	# Defining a function used to move the servo motor up 
-	def servo_control_up(self):
+	# Defining a function used to move the servo motor down 
+	def servo_control_down(self):
 
                 # Checking if text file used for memory by the program exists
                 if os.path.isfile('mem2.txt'):
@@ -130,8 +130,8 @@ class ServoManual:
                                 fp.close()
                                 self.write_to_temp_file_servo(ServoManual.angle)
 
-	# Defining a function used to move the servo motor down 
-	def servo_control_down(self):
+	# Defining a function used to move the servo motor up 
+	def servo_control_up(self):
 
                 # Checking if text file used for memory by the program exists
                 if os.path.isfile('mem2.txt'):
