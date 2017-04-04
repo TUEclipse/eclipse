@@ -15,19 +15,7 @@ import argparse
 from Stepper import Stepper
 from Servo import Servo
 
-#ap = argparse.ArgumentParser()
-#ap.add_argument("-p", "--picamera", type=int, default=-1, help="whether the PiCamera being used")
-#args = vars(ap.parse_args())
-
-#vs = VideoStream(usePiCamera=args["picamera"] > 0).start()
-#vs = cv2.VideoCapture("/home/pi/Desktop/Full_Tracking_System_Test.mp4")
-
-#vs = cv2.VideoCapture("/home/pi/Downloads/April_03_17_Manual_and_Stream_Test_2.h264")
-#time.sleep(2)
 vs = cv2.VideoCapture("/home/pi/Desktop/Test.h264")
-
-#vs.set(cv2.cv.CV_CAP_PROP_FPS, 25)
-#time.sleep(2.0)
 
 def main(argv):
 	
@@ -85,7 +73,7 @@ def main(argv):
 	                        # Display frames and exit
 	#       cv2.imshow('light', thr)
 	        cv2.imshow('frame', frame)
-	        cv2.waitKey(4)
+	        cv2.waitKey(1)
 	        key = cv2.waitKey(1)
 	
 	        if cv2.waitKey(1) & 0xFF == ord('q'):
