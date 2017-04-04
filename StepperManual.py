@@ -100,7 +100,7 @@ class StepperManual:
 
     # Defining function used to change the position of the stepper
     # motor in the forward direction
-    def change_position_forward(self):
+    def change_position_backward(self):
 
 	# Checking if temporary storage file used to keep track of the 
 	# stepper motor position exists 		
@@ -197,7 +197,7 @@ class StepperManual:
 
     # Defining function used to change the position of the stepper
     # motor in the backward direction    
-    def change_position_backward(self):
+    def change_position_forward(self):
 
 	# Checking if temporary storage file used to keep track of the 
 	# stepper motor position exists 				
