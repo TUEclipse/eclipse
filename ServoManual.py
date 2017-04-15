@@ -10,16 +10,16 @@ class ServoManual:
 	def __init__(self):
 		pass        
 
-        # Use 'GPIO naming'
+        # Using GPIO naming
 	wiringpi.wiringPiSetupGpio()
 
-	# Set #18 to be a PWM output
+	# Defining pin 18 of the Raspberry Pi to be a PWM output
 	wiringpi.pinMode(18, wiringpi.GPIO.PWM_OUTPUT)
 
-	# Set the PWM mode to milliseconds stype
+	# Setting the PWM mode to milliseconds
 	wiringpi.pwmSetMode(wiringpi.GPIO.PWM_MODE_MS)
 
-	# Divide down clock
+	# Dividing down clock
 	wiringpi.pwmSetClock(192)
 	wiringpi.pwmSetRange(2000)
 
@@ -30,10 +30,10 @@ class ServoManual:
 	# when the corresponding arrow key is pressed by the user
 	angle = 10
 
-	# Defininf defualt servo angle
+	# Defining default servo angle
 	default = 0
 
-	# Defining angle limit for the servo (determined by the case printed for the camera)
+	# Defining angle limit for the servo
 	angle_limit = 90
 
 	# Side-note 210 is 2.1 ms
@@ -47,13 +47,14 @@ class ServoManual:
         # This function is used as a means of providing memory to keep track of the position 
 	# associated with the servo motor.
         def write_to_temp_file_servo(self,value):
+
        	        # Opening/creating temporary text file if it does not exist
                 try:
                         with open("mem2.txt", 'w') as f:
                                 f.write('%d' %int(value))
                 except IOError:
 
-                        # Letting the user know that an IO error has occured
+                        # Letting the user know that an IO error has occurred
                         print 'Cannot open storage file for writing'
                 else:
 
@@ -68,7 +69,7 @@ class ServoManual:
                 if os.path.isfile('mem2.txt'):
 
                         try:
-                                 # Opening storage file for reading
+                                # Opening storage file for reading
                                 fp = open("mem2.txt",'r')
 
                         except IOError:

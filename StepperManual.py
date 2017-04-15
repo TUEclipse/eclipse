@@ -4,7 +4,7 @@ import time
 import sys
 import os
 
-# Definign class used to run the stepper motor
+# Defining class used to run the stepper motor
 class StepperManual:
     def __init__(self):
 	pass
@@ -30,7 +30,7 @@ class StepperManual:
     GPIO.setmode(GPIO.BOARD)
 
     # Raspberry Pi setup for GPIO pins
-    # Pins set as output
+    # Previously outlined pins set as output
     GPIO.setup(coil_A_1_pin, GPIO.OUT)
     GPIO.setup(coil_A_2_pin, GPIO.OUT)
     GPIO.setup(coil_B_1_pin, GPIO.OUT)
@@ -45,7 +45,7 @@ class StepperManual:
 
     # Forward function definition
     # Inputs to the function include delay value in milliseconds 
-    # and the # of steps the stepper motor should take
+    # and the number of steps the stepper motor should take
     def forward(self, delay, steps):
         for i in range(0, steps):
             # moves in sequence specified by activation of coils
@@ -61,7 +61,7 @@ class StepperManual:
 
     # Backwards function definition
     # Inputs to the function include delay value in milliseconds 
-    # and the # of steps the stepper motor should take	
+    # and the number of steps the stepper motor should take	
     def backwards(self, delay, steps):
         for i in range(0, steps):
             # moves in sequence specified by activation of coils
@@ -90,7 +90,7 @@ class StepperManual:
                 f.write('%d' % int(value))
         except IOError:
 
-            # Letting the user know that an IO error has occured
+            # Letting the user know that an IO error has occurred
             print 'Cannot open storage file for writing'
         else:
 
@@ -99,7 +99,7 @@ class StepperManual:
 
 
     # Defining function used to change the position of the stepper
-    # motor in the forward direction
+    # motor in the backward direction
     def change_position_backward(self):
 
 	# Checking if temporary storage file used to keep track of the 
@@ -120,12 +120,12 @@ class StepperManual:
                 current_val = [int(n) for n in fp.read().split()]
 		
 		# Calculating the new required stepper motor position thereby obtaining the number 
-		# of steps that should be taken after a right arrow key press
+		# of steps that should be taken after a left arrow key press
                 required_pos = StepperManual.steps + current_val[0]
 		
 		# If the next required position causes the stepper motor to spin more than 180 degrees from 
 		# the rest/default position (which means required_pos > 514) the stepper motor is turned 
-		# backwards thereby pointing to the required position from the opposite side 
+		# back on itself thereby pointing to the required position from the opposite side 
                 if required_pos > 514: 
 		    
                     # Obtaining the number of steps necessary to spin the stepper motor to the required
@@ -139,7 +139,7 @@ class StepperManual:
 		    # Closing the temporary storage file that was opened for reading
                     fp.close()
 
-	 	    # Calculating the new current position of the stepper motor after it spinned back 
+	 	    # Calculating the new current position of the stepper motor after it spun back 
 		    # on itself (position in terms of steps)	
                     new_curr_value = current_val[0] - (current_val[0] - (required_pos - 514))
 
@@ -165,7 +165,7 @@ class StepperManual:
 		
 	    # Driving stepper motor by the specified amount (determined by user input)
 	    # In this case the file storing the current position of the stepper motor
-            # does not exit yet	
+            # does not exist yet	
             self.forward(StepperManual.delay, StepperManual.steps)
             self.clear()
 
@@ -181,11 +181,11 @@ class StepperManual:
 
             else: 
 		
-		# Obtaining current stepper posisiton (which in this case is the defualt value)
+		# Obtaining current stepper position (which in this case is the default value)
                 current_val = [int(n) for n in fp.read().split()]
 
 		# Defining new current value after the stepper motor has moved from the 
-                # the defualt position for the first time 
+                # the default position for the first time 
                 val = int(current_val[0]) + int(StepperManual.steps)
 
                 # Closing file that was opened for reading
@@ -196,7 +196,7 @@ class StepperManual:
 
 
     # Defining function used to change the position of the stepper
-    # motor in the backward direction    
+    # motor in the forward direction    
     def change_position_forward(self):
 
 	# Checking if temporary storage file used to keep track of the 
@@ -217,12 +217,12 @@ class StepperManual:
                 current_val = [int(n) for n in fp.read().split()] 
                
 		# Calculating the new required stepper motor position thereby obtaining the number 
-		# of steps that should be taken after a left arrow key press
+		# of steps that should be taken after a right arrow key press
        	        required_pos = current_val[0] - StepperManual.steps 
 
 		# If the next required position causes the stepper motor to spin more than 180 degrees from 
 		# the rest/default position (which means required_pos < 0) the stepper motor is turned 
-		# forwards thereby pointing to the required position from the opposite side 
+		# back on itself thereby pointing to the required position from the opposite side 
                 if required_pos < 0:
 		
 		    # Obtaining the number of steps necessary to spin the stepper motor to the required
@@ -236,7 +236,7 @@ class StepperManual:
 		    # Closing the temporary storage file that was opened for reading
                     fp.close()
 	
-	    	    # Calculating the new current position of the stepper motor after it spinned forward
+	    	    # Calculating the new current position of the stepper motor after it spun back
 		    # on itself (position in terms of steps)		
                     new_curr_val = 514 - abs(required_pos)
 
@@ -263,7 +263,7 @@ class StepperManual:
 		
             # Driving stepper motor by the specified amount (determined by user input)
 	    # In this case the file storing the current position of the stepper motor
-            # does not exit yet	  
+            # does not exist yet	  
             self.backwards(StepperManual.delay, StepperManual.steps)
             self.clear()
 
@@ -279,11 +279,11 @@ class StepperManual:
 
             else: 
 
-		# Obtaining current stepper posisiton (which in this case is the defualt value)
+		# Obtaining current stepper position (which in this case is the default value)
                 current_val = [int(n) for n in fp.read().split()]
 
 		# Defining new current value after the stepper motor has moved from the 
-                # the defualt position for the first time 
+                # the default position for the first time 
                 val = int(current_val[0]) - int(StepperManual.steps)
 
                 # Closing the file that was opened for reading
