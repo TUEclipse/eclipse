@@ -19,7 +19,6 @@ class ServoManual:
 	# Setting the PWM mode to milliseconds
 	wiringpi.pwmSetMode(wiringpi.GPIO.PWM_MODE_MS)
 
-	# Dividing down clock
         # Dividing down clock
         # Pin 18 on the Raspberry Pi declared for the purpose of being a PWM output requires a
         # frequency of 50 Hz for the servo to operate properly.
